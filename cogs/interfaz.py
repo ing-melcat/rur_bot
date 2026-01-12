@@ -3,8 +3,8 @@ from discord.ext import commands
 from discord import app_commands
 
 # --- CONFIGURACIÓN DE IMÁGENES ---
-BANNER_IMG = "https://i.imgur.com/0v0a8Nq.png"
-LOGO_IMG = "https://i.imgur.com/4Jj5Z6K.png"
+BANNER_IMG = "https://imgur.com/a/mRKKqF5"
+LOGO_IMG = "https://imgur.com/h2FHJHU"
 
 class MenuDashboard(discord.ui.View):
     def __init__(self):
@@ -47,3 +47,4 @@ class Interfaz(commands.Cog):
 
 async def setup(bot):
     await bot.add_cog(Interfaz(bot))
+
