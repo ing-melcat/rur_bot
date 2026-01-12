@@ -1,55 +1,29 @@
 import discord
-import os
 from discord.ext import commands
+import asyncio
 
-TOKEN = os.environ["DISCORD_TOKEN"]
-AUTO_ROLE_NAME = os.environ.get("AUTO_ROLE_NAME", "MEMBER")
-
-intents = discord.Intents.default()
-intents.guilds = True
-intents.members = True  # NECESARIO para auto-rol
-
-class DashboardBot(commands.Bot):
+class Bot(commands.Bot):
     def __init__(self):
+        intents = discord.Intents.default()  # 🚫 SIN message_content
         super().__init__(
-            command_prefix="!",
+            command_prefix="!",  # no se usa, pero discord.py lo pide
             intents=intents
         )
 
     async def setup_hook(self):
-        # Cargar cogs
-        for file in os.listdir("./cogs"):
-            if file.endswith(".py"):
-                await self.load_extension(f"cogs.{file[:-3]}")
-                print(f"✅ Cargado: {file}")
-
+        # Sync global de slash commands
         await self.tree.sync()
-        print("🚀 Bot listo")
+        print("✅ Slash commands sincronizados")
 
-bot = DashboardBot()
+bot = Bot()
 
 @bot.event
 async def on_ready():
-    print(f"🟢 Conectado como {bot.user}")
+    print(f"🤖 Bot listo como {bot.user}")
 
-    # Asignar rol a usuarios existentes
-    for guild in bot.guilds:
-        role = discord.utils.get(guild.roles, name=AUTO_ROLE_NAME)
-        if not role:
-            print(f"⚠️ Rol '{AUTO_ROLE_NAME}' no existe en {guild.name}")
-            continue
+# ===== SLASH COMMAND =====
+@bot.tree.command(name="ping", description="Ping del bot")
+async def ping(interaction: discord.Interaction):
+    await interaction.response.send_message("🏓 Pong")
 
-        for member in guild.members:
-            if not member.bot and role not in member.roles:
-                try:
-                    await member.add_roles(role)
-                except:
-                    pass
-
-@bot.event
-async def on_member_join(member):
-    role = discord.utils.get(member.guild.roles, name=AUTO_ROLE_NAME)
-    if role:
-        await member.add_roles(role)
-
-bot.run(TOKEN)
+bot.run("TU_TOKEN")
