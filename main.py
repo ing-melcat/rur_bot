@@ -3,7 +3,7 @@ import os
 from discord.ext import commands
 
 TOKEN = os.environ["DISCORD_TOKEN"]
-AUTO_ROLE_NAME = os.environ.get("AUTO_ROLE_NAME", "Miembro")
+AUTO_ROLE_NAME = os.environ.get("AUTO_ROLE_NAME", "MEMBER")
 
 intents = discord.Intents.default()
 intents.guilds = True
